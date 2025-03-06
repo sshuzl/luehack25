@@ -1,0 +1,84 @@
+Gegeben sei der String aus Aufgabe 1, bestehend aus den Zeichen 0 und 1. Dieser stellt die Folge 0 -> 200 modulo der geheimen Moduli dar:
+01010101010101010010101010101010100101010101010101001010101010101010010101010101010100101010101010101001010101010100101010101010101001010101010101010010101010101010100101010010101010101010100101010101
+
+Es gibt zwei mögliche Lösungsansätze:
+
+    Brute-Force-Ansatz
+    Mustererkennung (Pattern-Analyse)
+
+
+
+
+Mustererkennung
+Idee/Pattern:
+- Kleinster Modulus (m0):
+       Durch die Abfolge der Werte 0 und 1 erkennen wir, dass m0 = 2.
+
+- Zweiter Modulus (m1):
+       Wenn wir einen ungeraden Modulus haben und aufsteigende Zahlen modulieren, erhalten wir eine „00“ (bzw. zwei gerade Zahlen), wenn wir den Modulus überschreiten.
+
+       Beispiel:
+       0 1 2 3 4 5 6 7 8 9
+       0 1 2 0 1 2 0 1 2 0 (mod 3)
+       0 1 0 0 1 0 0 1 0 0 (mod 3 mod 2)
+
+- Alle weiteren Moduli(m2,m3)
+
+       Der dritte Modulus schneidet den Zyklus des zweiten Modulus ab, erzeugt aber nicht immer eine „00“.
+       Wenn (für m1 = 2. Modulus und m2 = 3. Modulus) gilt:
+
+              x * m1 < m2 < (x+1) * m1
+
+       dann:
+
+              Falls x gerade ist => „00“
+              Falls x ungerade ist => keine „00“
+
+       Das passiert, weil der Zyklus von m1 entweder mit einem geraden oder ungeraden Offset abgeschnitten wird.
+
+              zb. für mod 5
+              x = 2 -> 10 11 12 13 14  x=3 -> 15 16 17 18 19
+                        0  1  2  3  4          0  1  2  3  4  mod 5
+                        0  1  0  1  0          0  1  0  1  0  mod 5 mod 2
+                        -  0  -  0  -          0  -  0  -  0  <- Ungerade moduli die mod 5 abschneiden
+
+       Für einen ungeraden Modulus wie 11 oder 13 (x = 2) setzen wir eine 1 -> 0 und erhalten „00“.
+       Für 17 oder 19 (x = 3) setzen wir genau eine 0 -> 0 und erhalten „keine 00“.
+       In beiden Fällen wird der Zyklus unterbrochen, wodurch er erkennbar wird.
+
+       Für den letzten Modulus gilt Ähnliches: Er wird an der Bedingung
+
+              x * m1 < m3 mod m2 < (x+1) * m1
+
+       abgeschnitten. Je mehr Moduli, desto komplexer wird die Analyse.
+
+Lösung:
+
+Wir haben uns für den geraden Fall entschieden (00 erkennbar), um die Analyse zu erleichtern.
+Bestimmung der Moduli:
+Gegeben der ursprüngliche String:
+01010101010101010010101010101010100101010101010101001010101010101010010101010101010100101010101010101001010101010100101010101010101001010101010101010010101010101010100101010010101010101010100101010101
+
+
+Schritt 1: Splitten an „00“
+01010101010101010    |-> 17 Werte -> Zweiter Modulus: 17
+01010101010101010
+01010101010101010
+01010101010101010
+01010101010101010
+01010101010101010
+0101010101010        |-> Unser Zyklus wird unterbrochen (6 vollständige Zyklen a 17 + 13 übrig) -> Dritter Modulus: 6 × 17 + 13 = 115
+01010101010101010
+01010101010101010
+01010101010101010
+0101010              |-> Unser Zyklus wird erneut unterbrochen -> Vierter Modulus: 9 × 17 + 13 + 7 = 173
+01010101010101010    (m4 + m2 < 200 -> so sehen wir den Zyklus nochmal und sind eindeutig)
+0101010101           
+
+
+Ergebnis:
+Die geheimen Moduli sind:
+[173, 115, 17, 2]
+
+Flag:
+SSH{mod_numbers_are_173+115+17+2}

@@ -1,0 +1,11 @@
+Dieses Mal haben wir die schöne Eigenschaft, dass mi > 2*m(i+1).  
+Das bedeutet, dass wir jeden Zyklus mindestens zweimal hintereinander sehen, was es dann sehr einfach macht diese zu finden.
+Da jeder Zyklus immer von vorne (0) startet, können wir gucken, ob die Zahlenreihe [0:x] und [x:2x] identisch sind. 
+Ist dies der Fall haben wir einen Modulo, nämlich x, gefunden und können ab 2x weitersuchen. 
+Siehe solver.
+
+Suche Cycles wie im Programm
+[35183, 16579, 5103, 1989, 649, 165, 63, 31, 11, 3, 2]
+
+Nur die ersten 4 wie im Programm beschrieben.
+SSH{mod_numbers_are_35183+16579+5103+1989}

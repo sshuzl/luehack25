@@ -1,0 +1,18 @@
+Der klassische meet-in-the-middle attack.
+Anstatt, dass wir einen 256bit key haben,
+haben wir 2 128bit keys mit denen wir in hintereinander verschlüsseln.
+
+Wir kennen den größten Teil des keys, uns fehlen 3 bytes vom ersten
+und 3 bytes vom zweiten key. Und gegeben ist ein message ciphertext paar.
+
+Wir Lösen es mit meet in the middle.
+Berechne alle Möglichen ciphertexte für jeden der 2^24 möglichen ersten
+keys und der bekannten Nachricht und speichere diese.
+Folgend berechne alle möglichen decryptions für jeden 2^24 möglichen zweiten
+keys und dem ciphertext und gucke, ob der ciphertext in der liste enthalten ist.
+Damit finden wir den key in ~ 2^24 + log(2^24)* 2^24 schritten.
+Mit einem simplen python script (siehe solution.py) finde ich den key in 2-4 min.
+
+Alle 2^48 keys ausprobieren ist theoretisch/praktisch berechenbar aber kaum zeitlich
+für Schüler im CTF mit ihrer Hardware und ohne optimierte scripte realisierbar.
+
